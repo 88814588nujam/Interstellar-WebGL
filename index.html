@@ -1,127 +1,406 @@
 <!DOCTYPE html>
-<html lang="en-us">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Unity Web Player | Interstellar</title>
-    <link rel="shortcut icon" href="TemplateData/favicon.ico">
-    <link rel="stylesheet" href="TemplateData/style.css">
-  </head>
-  <body>
-    <div id="unity-container" class="unity-desktop">
-      <canvas id="unity-canvas" width=1280 height=720 tabindex="-1"></canvas>
-      <div id="unity-loading-bar">
-        <div id="unity-logo"></div>
-        <div id="unity-progress-bar-empty">
-          <div id="unity-progress-bar-full"></div>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的产品展示</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 1rem 0;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .intro {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+        
+        .product {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .product:hover {
+            transform: translateY(-5px);
+        }
+        
+        .product-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        
+        .product-info {
+            padding: 20px;
+        }
+        
+        .product-title {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .product-desc {
+            color: #666;
+            margin-bottom: 15px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #2c3e50;
+            color: white;
+            margin-top: 40px;
+        }
+        
+        /* 语言切换样式 */
+        .language-switcher {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+        
+        .language-btn {
+            background-color: #34495e;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .language-icon {
+            margin-right: 5px;
+            font-size: 16px;
+        }
+        
+        .language-text {
+            display: inline-block;
+        }
+        
+        .language-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: white;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            display: none;
+            width: 120px;
+            z-index: 10;
+        }
+        
+        .language-dropdown.show {
+            display: block;
+        }
+        
+        .language-dropdown a {
+            display: block;
+            padding: 8px 15px;
+            color: #333;
+            text-decoration: none;
+        }
+        
+        .language-dropdown a:hover {
+            background-color: #f5f5f5;
+        }
+        
+        @media (max-width: 768px) {
+            .products {
+                grid-template-columns: 1fr;
+            }
+            
+            .language-switcher {
+                position: static;
+                text-align: right;
+                margin-bottom: 10px;
+            }
+            
+            .language-dropdown {
+                right: auto;
+                left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1 data-i18n="title">我的创意产品</h1>
+            <p data-i18n="subtitle">用心制作，品质保证</p>
+            
+            <!-- 语言切换按钮 -->
+            <div class="language-switcher">
+                <button class="language-btn" id="languageBtn">
+                    <span class="language-icon">🌐</span>
+                    <span class="language-text" data-i18n="language">语言</span>
+                </button>
+                <div class="language-dropdown" id="languageDropdown">
+                    <a href="#" data-lang="zh" data-i18n="chinese">中文</a>
+                    <a href="#" data-lang="en" data-i18n="english">English</a>
+                    <a href="#" data-lang="ja" data-i18n="japanese">日本語</a>
+                    <a href="#" data-lang="ko" data-i18n="korean">한국어</a>
+                </div>
+            </div>
         </div>
-      </div>
-      <div id="unity-warning"> </div>
-      <div id="unity-footer">
-        <div id="unity-logo-title-footer"></div>
-        <div id="unity-fullscreen-button"></div>
-        <div id="unity-build-title">Interstellar</div>
-      </div>
+    </header>
+    
+    <div class="container">
+        <section class="intro">
+            <h2 data-i18n="welcome">欢迎来到我的作品展示</h2>
+            <p data-i18n="intro-text">这里展示了我精心设计和制作的各种产品，每一个都倾注了我的心血和创意。</p>
+        </section>
+        
+        <section class="products">
+            <!-- 产品1 -->
+            <div class="product">
+                <img src="https://via.placeholder.com/400x300?text=产品1" alt="产品1" class="product-img">
+                <div class="product-info">
+                    <h3 class="product-title" data-i18n="product1-title">智能家居控制器</h3>
+                    <p class="product-desc" data-i18n="product1-desc">一款可以通过手机APP控制家中所有智能设备的中央控制器，支持语音控制和自动化场景设置。</p>
+                    <p><strong data-i18n="features">特点：</strong><span data-i18n="product1-features">多设备兼容、易安装、节能省电</span></p>
+                </div>
+            </div>
+            
+            <!-- 产品2 -->
+            <div class="product">
+                <img src="https://via.placeholder.com/400x300?text=产品2" alt="产品2" class="product-img">
+                <div class="product-info">
+                    <h3 class="product-title" data-i18n="product2-title">环保材料背包</h3>
+                    <p class="product-desc" data-i18n="product2-desc">采用回收塑料瓶制成的环保材料制作的背包，轻便耐用，防水设计，适合日常出行和短途旅行。</p>
+                    <p><strong data-i18n="features">特点：</strong><span data-i18n="product2-features">环保材料、多口袋设计、舒适肩带</span></p>
+                </div>
+            </div>
+            
+            <!-- 产品3 -->
+            <div class="product">
+                <img src="https://via.placeholder.com/400x300?text=产品3" alt="产品3" class="product-img">
+                <div class="product-info">
+                    <h3 class="product-title" data-i18n="product3-title">手工陶瓷茶具</h3>
+                    <p class="product-desc" data-i18n="product3-desc">纯手工制作的陶瓷茶具套装，每一件都是独一无二的艺术品，让品茶成为一种享受。</p>
+                    <p><strong data-i18n="features">特点：</strong><span data-i18n="product3-features">手工制作、天然釉料、保温性好</span></p>
+                </div>
+            </div>
+            
+            <!-- 产品4 -->
+            <div class="product">
+                <img src="https://via.placeholder.com/400x300?text=产品4" alt="产品4" class="product-img">
+                <div class="product-info">
+                    <h3 class="product-title" data-i18n="product4-title">木质手机支架</h3>
+                    <p class="product-desc" data-i18n="product4-desc">精选实木制作的手机支架，天然木纹每一款都不同，角度可调，保护颈椎健康。</p>
+                    <p><strong data-i18n="features">特点：</strong><span data-i18n="product4-features">天然木材、多角度调节、稳固耐用</span></p>
+                </div>
+            </div>
+        </section>
     </div>
+    
+    <footer>
+        <div class="container">
+            <p data-i18n="footer">© 2023 我的产品展示 | 联系邮箱: myproducts@example.com</p>
+        </div>
+    </footer>
     <script>
-      var canvas = document.querySelector("#unity-canvas");
+        // 多语言文本
+        const translations = {
+            zh: {
+                "title": "nuJaM的世界",
+                "subtitle": "我没有失败，我只是找到了一万种不行的方法。",
+                "welcome": "欢迎来到我的作品展示",
+                "intro-text": "这里展示了我精心设计和制作的各种产品，每一个都倾注了我的心血和创意。",
+                "product1-title": "Jump-Game",
+                "product1-desc": "使用Unity开发的简单跳跃游戏。",
+                "product1-features": "多设备兼容、易安装、节能省电",
+                "product2-title": "环保材料背包",
+                "product2-desc": "采用回收塑料瓶制成的环保材料制作的背包，轻便耐用，防水设计，适合日常出行和短途旅行。",
+                "product2-features": "环保材料、多口袋设计、舒适肩带",
+                "product3-title": "手工陶瓷茶具",
+                "product3-desc": "纯手工制作的陶瓷茶具套装，每一件都是独一无二的艺术品，让品茶成为一种享受。",
+                "product3-features": "手工制作、天然釉料、保温性好",
+                "product4-title": "木质手机支架",
+                "product4-desc": "精选实木制作的手机支架，天然木纹每一款都不同，角度可调，保护颈椎健康。",
+                "product4-features": "天然木材、多角度调节、稳固耐用",
+                "features": "特点：",
+                "footer": "© 2023 我的产品展示 | 联系邮箱: myproducts@example.com",
+                "language": "语言",
+                "chinese": "中文",
+                "english": "English",
+                "japanese": "日本語",
+                "korean": "한국어"
+            },
+            ja: {
+                "title": "nuJaMの世界",
+                "subtitle": "私は失敗したのではなく、働かない方法を一万通り見つけただけなのです。",
+                "welcome": "私の作品展示へようこそ",
+                "intro-text": "ここでは、私が丹精込めてデザインし制作した様々な製品を展示しています。一つ一つに私の情熱と創造性が込められています。",
+                "product1-title": "Jump-Game",
+                "product1-desc": "Unityを使用して開発されたシンプルなジャンプゲーム。",
+                "product1-features": "マルチデバイス互換、簡単なインストール、省エネ",
+                "product2-title": "エコフレンドリーなバックパック",
+                "product2-desc": "リサイクルペットボトルから作られたバックパックで、軽量で耐久性があり、防水設計で日常の外出や短い旅行に最適です。",
+                "product2-features": "エコフレンドリーな素材、複数のポケット、快適なストラップ",
+                "product3-title": "手作りの陶磁器茶セット",
+                "product3-desc": "手作業で作られた陶磁器の茶セットで、それぞれがユニークな芸術品であり、お茶を飲むことを楽しい体験にします。",
+                "product3-features": "手作り、天然釉薬、保温性が良い",
+                "product4-title": "木製のスマホスタンド",
+                "product4-desc": "選ばれた天然木から作られたスマホスタンドで、それぞれが異なる天然木目を持ち、首の保護のために角度調節可能です。",
+                "product4-features": "天然木、調節可能な角度、頑丈で耐久性がある",
+                "features": "特徴：",
+                "footer": "© 2023 私の製品展示 | 連絡先: myproducts@example.com",
+                "language": "言語",
+                "chinese": "中国語",
+                "english": "英語",
+                "japanese": "日本語",
+                "korean": "韓国語"
+            },
+	    en: {
+                "title": "My Creative Products",
+                "subtitle": "I have not failed. I've just found 10,000 ways that won't work.",
+                "welcome": "Welcome to My Portfolio",
+                "intro-text": "Here showcases various products I've carefully designed and created, each one infused with my passion and creativity.",
+                "product1-title": "Jump-Game",
+                "product1-desc": "A simple jump game developed using Unity.",
+                "product1-features": "Multi-device compatible, easy installation, energy saving",
+                "product2-title": "Eco-friendly Backpack",
+                "product2-desc": "Backpack made from recycled plastic bottles, lightweight and durable with waterproof design, perfect for daily use and short trips.",
+                "product2-features": "Eco-friendly material, multiple pockets, comfortable straps",
+                "product3-title": "Handmade Ceramic Tea Set",
+                "product3-desc": "Ceramic tea set crafted by hand, each piece is a unique artwork that makes tea drinking a delightful experience.",
+                "product3-features": "Handcrafted, natural glaze, good heat retention",
+                "product4-title": "Wooden Phone Stand",
+                "product4-desc": "Phone stand made from selected solid wood, each with unique natural wood grain, adjustable angle for neck protection.",
+                "product4-features": "Natural wood, adjustable angles, sturdy and durable",
+                "features": "Features:",
+                "footer": "© 2023 My Product Showcase | Contact: myproducts@example.com",
+                "language": "Language",
+                "chinese": "Chinese",
+                "english": "English",
+                "japanese": "Japanese",
+                "korean": "Korean"
+            },
+            ko: {
+                "title": "nuJaM의 세계",
+                "subtitle": "나는 실패한 게 아니라, 일하지 않는 방법을 수만 가지나 찾아냈을 뿐이다.",
+                "welcome": "나의 작품 전시에 오신 것을 환영합니다",
+                "intro-text": "여기에는 제가 정성스럽게 디자인하고 제작한 다양한 제품이 전시되어 있으며, 각각에 제 열정과 창의성이 담겨 있습니다.",
+                "product1-title": "Jump-Game",
+                "product1-desc": "Unity를 사용하여 개발된 간단한 점프 게임.",
+                "product1-features": "다중 기기 호환, 쉬운 설치, 에너지 절약",
+                "product2-title": "친환경 백팩",
+                "product2-desc": "재활용 페트병으로 만든 친환경 소재의 백팩으로, 가볍고 내구성이 뛰어나며 방수 설계로 일상적인 외출과 짧은 여행에 적합합니다.",
+                "product2-features": "친환경 소재, 다중 포켓, 편안한 어깨끈",
+                "product3-title": "수제 도자기 차 세트",
+                "product3-desc": "손으로 제작한 도자기 차 세트로, 각각이 독특한 예술품이며 차 마시기를 즐거운 경험으로 만들어 줍니다.",
+                "product3-features": "수제, 천유 유약, 우수한 보온성",
+                "product4-title": "목재 휴대폰 스탠드",
+                "product4-desc": "선별된 원목으로 만든 휴대폰 스탠드로, 각각 고유의 나무 결을 가지고 있으며 목 보호를 위해 각도 조절이 가능합니다.",
+                "product4-features": "천연 목재, 각도 조절 가능, 견고하고 내구성 있음",
+                "features": "특징:",
+                "footer": "© 2023 나의 제품 전시 | 연락처: myproducts@example.com",
+                "language": "언어",
+                "chinese": "중국어",
+                "english": "영어",
+                "japanese": "일본어",
+                "korean": "한국어"
+            }
+        };
 
-      // Shows a temporary message banner/ribbon for a few seconds, or
-      // a permanent error message on top of the canvas if type=='error'.
-      // If type=='warning', a yellow highlight color is used.
-      // Modify or remove this function to customize the visually presented
-      // way that non-critical warnings and error messages are presented to the
-      // user.
-      function unityShowBanner(msg, type) {
-        var warningBanner = document.querySelector("#unity-warning");
-        function updateBannerVisibility() {
-          warningBanner.style.display = warningBanner.children.length ? 'block' : 'none';
+        // 默认语言
+        let currentLanguage = 'zh';
+
+        // 获取DOM元素
+        const languageBtn = document.getElementById('languageBtn');
+        const languageDropdown = document.getElementById('languageDropdown');
+        const languageOptions = document.querySelectorAll('.language-dropdown a');
+
+        // 切换语言函数
+        function changeLanguage(lang) {
+            currentLanguage = lang;
+            document.documentElement.lang = lang;
+            
+            // 更新所有带data-i18n属性的元素
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translations[lang] && translations[lang][key]) {
+                    element.textContent = translations[lang][key];
+                }
+            });
+            
+            // 隐藏下拉菜单
+            languageDropdown.classList.remove('show');
+            
+            // 阻止默认行为
+            return false;
         }
-        var div = document.createElement('div');
-        div.innerHTML = msg;
-        warningBanner.appendChild(div);
-        if (type == 'error') div.style = 'background: red; padding: 10px;';
-        else {
-          if (type == 'warning') div.style = 'background: yellow; padding: 10px;';
-          setTimeout(function() {
-            warningBanner.removeChild(div);
-            updateBannerVisibility();
-          }, 5000);
-        }
-        updateBannerVisibility();
-      }
 
-      var buildUrl = "Build";
-      var loaderUrl = buildUrl + "/WebGL.loader.js";
-      var config = {
-        arguments: [],
-        dataUrl: buildUrl + "/WebGL.data",
-        frameworkUrl: buildUrl + "/WebGL.framework.js",
-        codeUrl: buildUrl + "/WebGL.wasm",
-        streamingAssetsUrl: "StreamingAssets",
-        companyName: "MaJun",
-        productName: "Interstellar",
-        productVersion: "1.0",
-        showBanner: unityShowBanner,
-      };
+        // 点击语言按钮切换下拉菜单显示
+        languageBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            languageDropdown.classList.toggle('show');
+        });
 
-      // By default, Unity keeps WebGL canvas render target size matched with
-      // the DOM size of the canvas element (scaled by window.devicePixelRatio)
-      // Set this to false if you want to decouple this synchronization from
-      // happening inside the engine, and you would instead like to size up
-      // the canvas DOM size and WebGL render target sizes yourself.
-      // config.matchWebGLToCanvasSize = false;
+        // 点击语言选项切换语言
+        languageOptions.forEach(option => {
+            option.addEventListener('click', function(e) {
+                e.preventDefault();
+                const lang = this.getAttribute('data-lang');
+                changeLanguage(lang);
+            });
+        });
 
-      // If you would like all file writes inside Unity Application.persistentDataPath
-      // directory to automatically persist so that the contents are remembered when
-      // the user revisits the site the next time, uncomment the following line:
-      // config.autoSyncPersistentDataPath = true;
-      // This autosyncing is currently not the default behavior to avoid regressing
-      // existing user projects that might rely on the earlier manual
-      // JS_FileSystem_Sync() behavior, but in future Unity version, this will be
-      // expected to change.
+        // 点击页面其他区域关闭下拉菜单
+        document.addEventListener('click', function() {
+            languageDropdown.classList.remove('show');
+        });
 
-      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-        // Mobile device style: fill the whole browser client area with the game canvas:
+        // 阻止下拉菜单内的点击事件冒泡
+        languageDropdown.addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
 
-        var meta = document.createElement('meta');
-        meta.name = 'viewport';
-        meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
-        document.getElementsByTagName('head')[0].appendChild(meta);
-        document.querySelector("#unity-container").className = "unity-mobile";
-        canvas.className = "unity-mobile";
-
-        // To lower canvas resolution on mobile devices to gain some
-        // performance, uncomment the following line:
-        // config.devicePixelRatio = 1;
-
-
-      } else {
-        // Desktop style: Render the game canvas in a window that can be maximized to fullscreen:
-        canvas.style.width = "1280px";
-        canvas.style.height = "720px";
-      }
-
-      document.querySelector("#unity-loading-bar").style.display = "block";
-
-      var script = document.createElement("script");
-      script.src = loaderUrl;
-      script.onload = () => {
-        createUnityInstance(canvas, config, (progress) => {
-          document.querySelector("#unity-progress-bar-full").style.width = 100 * progress + "%";
-              }).then((unityInstance) => {
-                document.querySelector("#unity-loading-bar").style.display = "none";
-                document.querySelector("#unity-fullscreen-button").onclick = () => {
-                  unityInstance.SetFullscreen(1);
-                };
-
-              }).catch((message) => {
-                alert(message);
-              });
-            };
-
-      document.body.appendChild(script);
-
+        // 页面加载时使用默认语言
+        document.addEventListener('DOMContentLoaded', function() {
+            changeLanguage(currentLanguage);
+        });
     </script>
-  </body>
+</body>
 </html>
